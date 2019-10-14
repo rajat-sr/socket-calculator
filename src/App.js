@@ -4,7 +4,6 @@ class App extends React.Component {
   state = {
     expression: '',
     result: 0,
-    lastOperator: '',
   };
 
   handleNumberInput(number) {
@@ -13,58 +12,49 @@ class App extends React.Component {
   }
 
   handleOperatorInput(operator) {
-    let { expression } = this.state;
+    const { expression } = this.state;
 
     if (expression.length === 0) {
       return;
     }
 
-    if (Number.isNaN(expression.charAt(expression.length - 1))) {
-      expression = expression.slice(0, -1);
-    }
-
-    let answer = this.evaluate();
-    let pairSolution = answer;
-    if (answer === null) {
-      answer = 0;
-      pairSolution = expression;
-    }
+    const answer = this.evaluate();
 
     this.setState({
-      lastOperator: operator,
       result: answer,
-      expression: pairSolution + operator,
+      expression: expression + operator,
     });
   }
 
   setAnswer() {
-    let answer = this.evaluate();
-    if (!answer) {
-      answer = 0;
-    }
-    this.setState({ expression: '', result: answer, lastOperator: '' });
+    const answer = this.evaluate();
+    this.setState({ expression: '', result: answer });
   }
 
   evaluate() {
-    const { expression, lastOperator } = this.state;
-    const operands = expression.split(lastOperator);
+    const { expression } = this.state;
 
-    switch (lastOperator) {
-      case '+':
-        return +operands[0] + +operands[1];
-      case '-':
-        return +operands[0] - +operands[1];
-      case '*':
-        return +operands[0] * +operands[1];
-      case '/':
-        return +operands[0] / +operands[1];
-      default:
-        return null;
+    let answer = 0;
+    try {
+      // eslint-disable-next-line
+      answer = eval(expression);
+      if (!answer) {
+        answer = 'INVALID INPUT';
+      }
+    } catch {
+      answer = 'INVALID INPUT';
     }
+
+    return answer;
   }
 
   clearConsole() {
-    this.setState({ expression: '', result: 0, lastOperator: '' });
+    this.setState({ expression: '', result: 0 });
+  }
+
+  clearLastCharacter() {
+    const { expression } = this.state;
+    this.setState({ expression: expression.slice(0, -1) });
   }
 
   render() {
@@ -117,18 +107,24 @@ class App extends React.Component {
           </div>
         </div>
         <div className="row">
-          <div className="triple-button" onClick={() => this.handleNumberInput('0')}>
+          <div className="button double-button" onClick={() => this.handleNumberInput('0')}>
             0
+          </div>
+          <div className="button" onClick={() => this.handleNumberInput('.')}>
+            .
           </div>
           <div className="button" onClick={() => this.handleOperatorInput('+')}>
             +
           </div>
         </div>
         <div className="row">
-          <div className="double-button" onClick={() => this.clearConsole()}>
-            Clear
+          <div className="button orange-button" onClick={() => this.clearConsole()}>
+            CLR
           </div>
-          <div className="double-button" onClick={() => this.setAnswer()}>
+          <div className="button orange-button" onClick={() => this.clearLastCharacter()}>
+            DEL
+          </div>
+          <div className="button double-button orange-button" onClick={() => this.setAnswer()}>
             =
           </div>
         </div>
