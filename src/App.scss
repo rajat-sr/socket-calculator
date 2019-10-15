@@ -1,22 +1,42 @@
+.app {
+  display: flex;
+  flex-direction: row;
+  border-radius: 8px;
+  margin: auto;
+  width: 1000px;
+  padding: 20px;
+  margin-top: 60px;
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.04) 0px 8px 24px 0px, rgba(150, 162, 176, 0.54) 0px 1px 3px 0px;
+}
+
+.calculator {
+  margin: 10px 50px;
+  padding: 10px;
+}
+
 .expression {
   font-size: 1.2rem;
   margin: 0;
-  padding: 5px;
+  padding: 10px;
   height: 30px;
-  width: 218px;
-  background-color: darkgray;
-  color: #444;
+  width: 308px;
+  background-color: #2b2824;
+  color: #aaa;
+  overflow: scroll;
+  text-align: end;
 }
 
 .result {
   font-size: 2rem;
   margin: 0;
-  padding: 5px;
+  padding: 10px;
   height: 38;
-  width: 218px;
-  background-color: darkgray;
-  color: #333;
-  direction: rtl;
+  width: 308px;
+  background-color: #2b2824;
+  color: white;
+  text-align: end;
+  overflow: scroll;
 }
 
 .row {
@@ -25,24 +45,31 @@
 }
 
 .button {
-  background-color: gray;
+  background-color: #282f37;
   color: white;
   width: 50px;
   height: 50px;
-  border: 1px darkgray solid;
-  padding-top: 5px;
-  padding-left: 5px;
-  font-size: 1.1rem;
-}
-
-.double-button {
-  width: 107px;
-}
-
-.triple-button {
-  width: 164px;
+  outline: none;
+  padding: 1rem;
+  font-size: 1.2rem;
+  text-align: center;
 }
 
 .orange-button {
-  background-color: orange;
+  color: orange;
+}
+
+.logs {
+  margin: 10px 50px;
+  width: 410px;
+}
+
+.history-result {
+  font-style: italic;
+  font-weight: bold;
+  color: #444;
+}
+
+.history-expression {
+  color: #666;
 }

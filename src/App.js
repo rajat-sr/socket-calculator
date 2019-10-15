@@ -69,7 +69,7 @@ class App extends React.Component {
     const { expression, result, logs } = this.state;
 
     return (
-      <>
+      <div className="app">
         <div className="calculator">
           <p className="expression">{expression}</p>
           <p className="result">{result}</p>
@@ -83,7 +83,7 @@ class App extends React.Component {
             <div className="button" onClick={() => this.handleNumberInput('9')}>
               9
             </div>
-            <div className="button" onClick={() => this.handleOperatorInput('/')}>
+            <div className="button orange-button" onClick={() => this.handleOperatorInput('/')}>
               /
             </div>
           </div>
@@ -97,7 +97,7 @@ class App extends React.Component {
             <div className="button" onClick={() => this.handleNumberInput('6')}>
               6
             </div>
-            <div className="button" onClick={() => this.handleOperatorInput('*')}>
+            <div className="button orange-button" onClick={() => this.handleOperatorInput('*')}>
               *
             </div>
           </div>
@@ -111,18 +111,21 @@ class App extends React.Component {
             <div className="button" onClick={() => this.handleNumberInput('3')}>
               3
             </div>
-            <div className="button" onClick={() => this.handleOperatorInput('-')}>
+            <div className="button orange-button" onClick={() => this.handleOperatorInput('-')}>
               -
             </div>
           </div>
           <div className="row">
-            <div className="button double-button" onClick={() => this.handleNumberInput('0')}>
+            <div className="button" onClick={() => this.handleNumberInput('0')}>
+              {' '}
+            </div>
+            <div className="button" onClick={() => this.handleNumberInput('0')}>
               0
             </div>
             <div className="button" onClick={() => this.handleNumberInput('.')}>
               .
             </div>
-            <div className="button" onClick={() => this.handleOperatorInput('+')}>
+            <div className="button orange-button" onClick={() => this.handleOperatorInput('+')}>
               +
             </div>
           </div>
@@ -133,21 +136,28 @@ class App extends React.Component {
             <div className="button orange-button" onClick={() => this.clearLastCharacter()}>
               DEL
             </div>
-            <div className="button double-button orange-button" onClick={() => this.setAnswer()}>
+            <div className="button orange-button" onClick={() => this.setAnswer()}>
+              {' '}
+            </div>
+            <div className="button orange-button" onClick={() => this.setAnswer()}>
               =
             </div>
           </div>
         </div>
         <div className="logs">
-          <ol>
-            {logs.map((calculations, index) => (
-              <li key={index}>
-                {calculations.expression} = {calculations.result}
-              </li>
-            ))}
-          </ol>
+          {logs.length === 0
+            ? <p>No history data available. Make some calculations.</p>
+            : logs.map((calculations, index) => (
+                <div key={index}>
+                  <p>
+                    <span className="history-expression">{calculations.expression}</span> ={' '}
+                    <span className="history-result">{calculations.result}</span>
+                  </p>
+                  <hr></hr>
+                </div>
+              ))}
         </div>
-      </>
+      </div>
     );
   }
 }
