@@ -1,5 +1,6 @@
 import React from 'react';
 import io from 'socket.io-client';
+import axios from 'axios';
 import './App.scss';
 class App extends React.Component {
   state = {
@@ -11,7 +12,17 @@ class App extends React.Component {
 
   componentDidMount() {
     this.socket = io('http://socketcalculator.herokuapp.com');
-    this.socket.on('logs', data => this.setState({ logs: data.calculations }));
+
+    // On a free tier, Heroku shuts down the server after certain time of inactivity
+    // We need to make this GET call to wake up Heroku server.
+    axios
+      .get('http://socketcalculator.herokuapp.com')
+      .then(res => {
+        console.log(res.data);
+        this.socket = io('http://socketcalculator.herokuapp.com');
+        this.socket.on('logs', data => this.setState({ logs: data.calculations }));
+      })
+      .catch(e => console.error(e.msg));
   }
 
   handleNumberInput(number) {
@@ -47,10 +58,12 @@ class App extends React.Component {
 
   setAnswer() {
     const answer = this.evaluate();
-    this.socket.emit('new calculation', {
-      expression: this.state.displayExpression,
-      result: answer,
-    });
+    if (this.socket) {
+      this.socket.emit('new calculation', {
+        expression: this.state.displayExpression,
+        result: answer,
+      });
+    }
     this.setState({
       expression: '',
       displayExpression: '',
@@ -179,15 +192,18 @@ class App extends React.Component {
           {logs.length === 0 ? (
             <p>No history data available. Make some calculations.</p>
           ) : (
-            logs.map((calculations, index) => (
-              <div key={index}>
-                <p>
-                  <span className="history-expression">{calculations.expression}</span> ={' '}
-                  <span className="history-result">{calculations.result}</span>
-                </p>
-                <hr></hr>
-              </div>
-            ))
+            <div>
+              {logs.map((calculations, index) => (
+                <div key={index}>
+                  <hr></hr>
+                  <p>
+                    <span className="history-expression">{calculations.expression}</span> ={' '}
+                    <span className="history-result">{calculations.result}</span>
+                  </p>
+                </div>
+              ))}
+              <p className="latest">Latest</p>
+            </div>
           )}
         </div>
       </div>
