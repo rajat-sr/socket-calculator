@@ -76,12 +76,19 @@ class App extends React.Component {
   }
 
   clearConsole() {
-    this.setState({ expression: '', result: 0 });
+    this.setState({
+      expression: '',
+      displayExpression: '',
+      result: 0,
+    });
   }
 
   clearLastCharacter() {
-    const { expression } = this.state;
-    this.setState({ expression: expression.slice(0, -1) });
+    const { expression, displayExpression } = this.state;
+    this.setState({
+      expression: expression.slice(0, -1),
+      displayExpression: displayExpression.slice(0, -1),
+    });
   }
 
   render() {
