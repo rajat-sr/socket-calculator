@@ -4,22 +4,26 @@ import './App.scss';
 class App extends React.Component {
   state = {
     expression: '',
+    displayExpression: '',
     result: 0,
     logs: [],
   };
 
   componentDidMount() {
-    this.socket = io('http://localhost:8000');
+    this.socket = io('http://socketcalculator.herokuapp.com');
     this.socket.on('logs', data => this.setState({ logs: data.calculations }));
   }
 
   handleNumberInput(number) {
-    const { expression } = this.state;
-    this.setState({ expression: expression + number });
+    const { expression, displayExpression } = this.state;
+    this.setState({
+      expression: expression + number,
+      displayExpression: displayExpression + number,
+    });
   }
 
   handleOperatorInput(operator) {
-    const { expression } = this.state;
+    const { expression, displayExpression } = this.state;
 
     if (expression.length === 0) {
       return;
@@ -27,16 +31,31 @@ class App extends React.Component {
 
     const answer = this.evaluate();
 
+    let displayOperator = operator;
+    if (operator === '*') {
+      displayOperator = '×';
+    } else if (operator === '/') {
+      displayOperator = '÷';
+    }
+
     this.setState({
       result: answer,
       expression: expression + operator,
+      displayExpression: displayExpression + displayOperator,
     });
   }
 
   setAnswer() {
     const answer = this.evaluate();
-    this.socket.emit('new calculation', { expression: this.state.expression, result: answer });
-    this.setState({ expression: '', result: answer });
+    this.socket.emit('new calculation', {
+      expression: this.state.displayExpression,
+      result: answer,
+    });
+    this.setState({
+      expression: '',
+      displayExpression: '',
+      result: answer,
+    });
   }
 
   evaluate() {
@@ -66,12 +85,12 @@ class App extends React.Component {
   }
 
   render() {
-    const { expression, result, logs } = this.state;
+    const { displayExpression, result, logs } = this.state;
 
     return (
       <div className="app">
         <div className="calculator">
-          <p className="expression">{expression}</p>
+          <p className="expression">{displayExpression}</p>
           <p className="result">{result}</p>
           <div className="row">
             <div className="button colored-button" onClick={() => this.clearConsole()}>
@@ -82,7 +101,7 @@ class App extends React.Component {
             </div>
             <div className="button"> </div>
             <div className="button colored-button" onClick={() => this.handleOperatorInput('/')}>
-              /
+              ÷
             </div>
           </div>
           <div className="row">
@@ -97,7 +116,7 @@ class App extends React.Component {
             </div>
 
             <div className="button colored-button" onClick={() => this.handleOperatorInput('*')}>
-              *
+              ×
             </div>
           </div>
           <div className="row">
@@ -130,7 +149,7 @@ class App extends React.Component {
               +
             </div>
           </div>
-          <div className="row">
+          <div className="row bottom-row">
             <div className="button bottom-left-button" onClick={() => this.handleNumberInput('0')}>
               {' '}
             </div>
