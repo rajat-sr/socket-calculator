@@ -7,12 +7,13 @@
   padding: 20px;
   margin-top: 60px;
   background-color: white;
-  box-shadow: rgba(0, 0, 0, 0.04) 0px 8px 24px 0px, rgba(150, 162, 176, 0.54) 0px 1px 3px 0px;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
 }
 
 .calculator {
   margin: 10px 50px;
-  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
 }
 
 .expression {
@@ -25,6 +26,8 @@
   color: #aaa;
   overflow: scroll;
   text-align: end;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
 }
 
 .result {
@@ -55,8 +58,16 @@
   text-align: center;
 }
 
-.orange-button {
+.colored-button {
   color: orange;
+}
+
+.bottom-left-button {
+  border-bottom-left-radius: 8px;
+}
+
+.bottom-right-button {
+  border-bottom-right-radius: 8px;
 }
 
 .logs {
