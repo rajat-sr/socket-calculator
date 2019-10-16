@@ -27,10 +27,14 @@ class App extends React.Component {
 
   handleNumberInput(number) {
     const { expression, displayExpression } = this.state;
-    this.setState({
+    const updatedState = {
       expression: expression + number,
       displayExpression: displayExpression + number,
-    });
+    };
+    if (expression.length === 0) {
+      updatedState.result = 0
+    }
+    this.setState(updatedState);
   }
 
   handleOperatorInput(operator) {
@@ -40,8 +44,6 @@ class App extends React.Component {
       return;
     }
 
-    const answer = this.evaluate();
-
     let displayOperator = operator;
     if (operator === '*') {
       displayOperator = '×';
@@ -50,7 +52,6 @@ class App extends React.Component {
     }
 
     this.setState({
-      result: answer.toString(),
       expression: expression + operator,
       displayExpression: displayExpression + displayOperator,
     });
@@ -119,9 +120,11 @@ class App extends React.Component {
             <div className="button colored-button" onClick={() => this.clearLastCharacter()}>
               DEL
             </div>
-            <div className="button"> </div>
-            <div className="button colored-button" onClick={() => this.handleOperatorInput('/')}>
-              ÷
+            <div className="button colored-button" onClick={() => this.handleNumberInput('(')}>
+              (
+            </div>
+            <div className="button colored-button" onClick={() => this.handleNumberInput(')')}>
+              )
             </div>
           </div>
           <div className="row">
@@ -134,9 +137,8 @@ class App extends React.Component {
             <div className="button" onClick={() => this.handleNumberInput('9')}>
               9
             </div>
-
-            <div className="button colored-button" onClick={() => this.handleOperatorInput('*')}>
-              ×
+            <div className="button colored-button" onClick={() => this.handleOperatorInput('/')}>
+              ÷
             </div>
           </div>
           <div className="row">
@@ -149,9 +151,8 @@ class App extends React.Component {
             <div className="button" onClick={() => this.handleNumberInput('6')}>
               6
             </div>
-
-            <div className="button colored-button" onClick={() => this.handleOperatorInput('-')}>
-              -
+            <div className="button colored-button" onClick={() => this.handleOperatorInput('*')}>
+              ×
             </div>
           </div>
           <div className="row">
@@ -164,27 +165,25 @@ class App extends React.Component {
             <div className="button" onClick={() => this.handleNumberInput('3')}>
               3
             </div>
-
-            <div className="button colored-button" onClick={() => this.handleOperatorInput('+')}>
-              +
+            <div className="button colored-button" onClick={() => this.handleOperatorInput('-')}>
+              -
             </div>
           </div>
           <div className="row bottom-row">
-            <div className="button bottom-left-button" onClick={() => this.handleNumberInput('0')}>
-              {' '}
+            <div className="button bottom-left-button" onClick={() => this.handleNumberInput('.')}>
+              .
             </div>
             <div className="button" onClick={() => this.handleNumberInput('0')}>
               0
             </div>
-            <div className="button" onClick={() => this.handleNumberInput('.')}>
-              .
+            <div className="button colored-button" onClick={() => this.setAnswer()}>
+              =
             </div>
-
             <div
               className="button colored-button bottom-right-button"
-              onClick={() => this.setAnswer()}
+              onClick={() => this.handleOperatorInput('+')}
             >
-              =
+              +
             </div>
           </div>
         </div>
