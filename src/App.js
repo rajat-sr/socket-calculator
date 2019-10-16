@@ -66,8 +66,6 @@ class App extends React.Component {
       });
     }
     this.setState({
-      expression: '',
-      displayExpression: '',
       result: answer.toString(),
     });
   }
