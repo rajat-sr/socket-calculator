@@ -22,7 +22,7 @@ class App extends React.Component {
         this.socket = io('http://socketcalculator.herokuapp.com');
         this.socket.on('logs', data => this.setState({ logs: data.calculations }));
       })
-      .catch(e => console.error(e.msg));
+      .catch(e => console.error('Server seems to be shut off.'));
   }
 
   handleNumberInput(number) {
@@ -50,7 +50,7 @@ class App extends React.Component {
     }
 
     this.setState({
-      result: answer,
+      result: answer.toString(),
       expression: expression + operator,
       displayExpression: displayExpression + displayOperator,
     });
@@ -61,13 +61,13 @@ class App extends React.Component {
     if (this.socket) {
       this.socket.emit('new calculation', {
         expression: this.state.displayExpression,
-        result: answer,
+        result: answer.toString(),
       });
     }
     this.setState({
       expression: '',
       displayExpression: '',
-      result: answer,
+      result: answer.toString(),
     });
   }
 
@@ -78,7 +78,7 @@ class App extends React.Component {
     try {
       // eslint-disable-next-line
       answer = eval(expression);
-      if (!answer) {
+      if (answer === undefined || answer === null) {
         answer = 'INVALID INPUT';
       }
     } catch {
