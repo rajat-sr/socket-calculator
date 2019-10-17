@@ -44,6 +44,11 @@ class App extends React.Component {
       return;
     }
 
+    const lastIndex = expression.length - 1;
+    if (['+', '-', '*', '/'].includes(expression[lastIndex])) {
+      return;
+    }
+
     let displayOperator = operator;
     if (operator === '*') {
       displayOperator = '×';
